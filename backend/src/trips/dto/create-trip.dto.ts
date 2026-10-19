@@ -6,10 +6,12 @@ import {
   Max,
   IsInt,
   IsDateString,
+  IsNotEmpty,
 } from 'class-validator';
 
 export class CreateTripDto {
   @IsString()
+  @IsNotEmpty()
   destination: string;
 
   @IsOptional()

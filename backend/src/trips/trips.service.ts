@@ -1,7 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateTripDto } from './dto/create-trip.dto.js';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, isValidObjectId } from 'mongoose';
 import { Trip } from './schemas/trip.schema.js';
 import { UpdateTripDto } from './dto/update-trip.dto.js';
 
@@ -19,20 +23,49 @@ export class TripsService {
     return this.tripModel.find().exec();
   }
 
-  findOne(id: string) {
-    return this.tripModel.findById(id).exec();
+  async findOne(id: string) {
+    this.validateId(id);
+
+    const trip = await this.tripModel.findById(id).exec();
+
+    this.throwIfNotFound(trip, id);
+
+    return trip;
   }
 
-  update(id: string, updateTripDto: UpdateTripDto) {
-    return this.tripModel
+  async update(id: string, updateTripDto: UpdateTripDto) {
+    this.validateId(id);
+
+    const trip = await this.tripModel
       .findByIdAndUpdate(id, updateTripDto, {
-        new: true,
+        returnDocument: 'after',
         runValidators: true,
       })
       .exec();
+
+    this.throwIfNotFound(trip, id);
+
+    return trip;
   }
 
-  remove(id: string) {
-    return this.tripModel.findByIdAndDelete(id).exec();
+  async remove(id: string) {
+    this.validateId(id);
+
+    const trip = await this.tripModel.findByIdAndDelete(id).exec();
+    this.throwIfNotFound(trip, id);
+
+    return trip;
+  }
+
+  private validateId(id: string) {
+    if (!isValidObjectId(id)) {
+      throw new BadRequestException('Invalid trip ID');
+    }
+  }
+
+  private throwIfNotFound(trip: Trip | null, id: string) {
+    if (!trip) {
+      throw new NotFoundException(`Trip with ID ${id} not found`);
+    }
   }
 }

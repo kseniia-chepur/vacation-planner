@@ -40,6 +40,6 @@ export class TripsController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id') id: string) {
-    this.tripsService.remove(id);
+    return this.tripsService.remove(id);
   }
 }
