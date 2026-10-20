@@ -10,8 +10,9 @@ A full-stack application for planning trips and discovering tourist attractions.
 
 ## Features
 
-- Trip management (CRUD)
-- Discovering tourist attractions using the OpenTripMap API *(planned)*
+- Manage trips (CRUD)
+- Generate random photos for selected destinations via the [Unsplash API](https://unsplash.com/developers)
+- Discover tourist attractions using the OpenTripMap API *(planned)*
 
 ## Project Structure
 
