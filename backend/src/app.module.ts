@@ -4,6 +4,7 @@ import { AppService } from './app.service.js';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TripsModule } from './trips/trips.module.js';
+import { UnsplashModule } from './unsplash/unsplash.module.js';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { TripsModule } from './trips/trips.module.js';
     }),
     MongooseModule.forRoot(process.env.MONGODB_URI!),
     TripsModule,
+    UnsplashModule,
   ],
   controllers: [AppController],
   providers: [AppService],
