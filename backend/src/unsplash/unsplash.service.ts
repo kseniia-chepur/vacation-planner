@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { UnsplashPhotoResponse } from './interfaces/photo-response.interface.js';
 import { DestinationPhoto } from './interfaces/destination-photo.interface.js';
 import { ERROR_MESSAGES } from '../common/constants/error-messages.js';
+import { handleExternalApiError } from '../common/utils/handle-external-api-error.js';
 
 @Injectable()
 export class UnsplashService {
@@ -30,13 +31,7 @@ export class UnsplashService {
       },
     );
 
-    if (!response.ok) {
-      throw new BadGatewayException(
-        response.status === 401
-          ? ERROR_MESSAGES.API_KEY_INVALID
-          : ERROR_MESSAGES.PHOTO_FETCH_FAILED,
-      );
-    }
+    handleExternalApiError(response);
 
     const photo: UnsplashPhotoResponse = await response.json();
 
