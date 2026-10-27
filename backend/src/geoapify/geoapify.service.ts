@@ -1,5 +1,4 @@
 import {
-  BadGatewayException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -9,12 +8,16 @@ import { ERROR_MESSAGES } from '../common/constants/error-messages.js';
 import { GeocodingResponse } from './interfaces/geocoding-response.interface.js';
 import { PlacesResponse } from './interfaces/places-response.interface.js';
 import { handleExternalApiError } from '../common/utils/handle-external-api-error.js';
+import { OverpassService } from '../openstreetmap/overpass.service.js';
 
 @Injectable()
 export class GeoapifyService {
   private readonly baseUrl = 'https://api.geoapify.com';
 
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly overpassService: OverpassService,
+  ) {}
 
   private getApiKey(): string {
     const apiKey = this.configService.get<string>('GEOAPIFY_API_KEY');
@@ -43,7 +46,10 @@ export class GeoapifyService {
       throw new NotFoundException(ERROR_MESSAGES.DESTINATION_NOT_FOUND);
     }
 
-    return this.getTouristAttractions(data.results[0].lat, data.results[0].lon);
+    return this.overpassService.searchPlaces(
+      data.results[0].lat,
+      data.results[0].lon,
+    );
   }
 
   async getTouristAttractions(lat: number, lon: number) {
