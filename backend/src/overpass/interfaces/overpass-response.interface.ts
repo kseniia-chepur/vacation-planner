@@ -11,10 +11,7 @@ export interface OverpassResponse {
     tags?: {
       name?: string;
       description?: string;
-      'name:en'?: string;
-      'description:en'?: string;
       website?: string;
-      wikipedia?: string;
       wikidata?: string;
       phone?: string;
       opening_hours?: string;

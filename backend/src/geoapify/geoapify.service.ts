@@ -5,10 +5,10 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ERROR_MESSAGES } from '../common/constants/error-messages.js';
-import { GeocodingResponse } from './interfaces/geocoding-response.interface.js';
-import { PlacesResponse } from './interfaces/places-response.interface.js';
+import { GeocodingResponse } from './interfaces/index.js';
 import { handleExternalApiError } from '../common/utils/handle-external-api-error.js';
-import { OverpassService } from '../openstreetmap/overpass.service.js';
+import { OverpassService } from '../overpass/overpass.service.js';
+import { WikidataService } from '../wikidata/wikidata.service.js';
 
 @Injectable()
 export class GeoapifyService {
@@ -17,6 +17,7 @@ export class GeoapifyService {
   constructor(
     private readonly configService: ConfigService,
     private readonly overpassService: OverpassService,
+    private readonly wikidataService: WikidataService,
   ) {}
 
   private getApiKey(): string {
@@ -46,30 +47,35 @@ export class GeoapifyService {
       throw new NotFoundException(ERROR_MESSAGES.DESTINATION_NOT_FOUND);
     }
 
-    return this.overpassService.searchPlaces(
+    const places = await this.overpassService.searchPlaces(
       data.results[0].lat,
       data.results[0].lon,
     );
-  }
 
-  async getTouristAttractions(lat: number, lon: number) {
-    const apiKey = this.getApiKey();
+    return Promise.all(
+      places.map(async (place) => {
+        if (!place.wikidata) {
+          return place;
+        }
 
-    const response = await fetch(
-      `${this.baseUrl}/v2/places?categories=tourism.attraction.viewpoint,entertainment,leisure.park&filter=circle:${lon},${lat},5000&limit=20&apiKey=${apiKey}`,
+        try {
+          const details = await this.wikidataService.getPlaceDetails(
+            place.wikidata,
+          );
+
+          const { name: nameEn, description: descriptionEn, image } =
+            details || {};
+
+          return {
+            ...place,
+            nameEn,
+            descriptionEn,
+            image,
+          };
+        } catch {
+          return place;
+        }
+      }),
     );
-
-    handleExternalApiError(response);
-
-    const places: PlacesResponse = await response.json();
-
-    return places.features.map((place) => ({
-      name: place.properties.name,
-      address: place.properties.formatted,
-      lat: place.properties.lat,
-      lon: place.properties.lon,
-      description: place.properties.description,
-      artworkType: place.properties.artwork_type,
-    }));
   }
 }

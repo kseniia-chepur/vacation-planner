@@ -6,7 +6,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { TripsModule } from './trips/trips.module.js';
 import { UnsplashModule } from './unsplash/unsplash.module.js';
 import { GeoapifyModule } from './geoapify/geoapify.module.js';
-import { OverpassModule } from './openstreetmap/overpass.module.js';
+import { OverpassModule } from './overpass/overpass.module.js';
+import { WikidataModule } from './wikidata/wikidata.module.js';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { OverpassModule } from './openstreetmap/overpass.module.js';
     UnsplashModule,
     GeoapifyModule,
     OverpassModule,
+    WikidataModule,
   ],
   controllers: [AppController],
   providers: [AppService],

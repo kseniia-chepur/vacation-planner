@@ -46,15 +46,12 @@ export class OverpassService {
     const data: OverpassResponse = await response.json();
 
     return data.elements
-      .filter((element) => element.tags?.name)
+      .filter((element) => element.tags?.name && element.tags?.wikidata)
       .map((element) => {
         const {
           name,
           description,
-          'name:en': nameEn,
-          'description:en': descriptionEn,
-          website,
-          wikipedia,
+          website,       
           wikidata,
           phone,
           opening_hours: openingHours,
@@ -67,12 +64,9 @@ export class OverpassService {
         return {
           name,
           description,
-          nameEn,
-          descriptionEn,
           lat,
           lon,
-          website,
-          wikipedia,
+          website,     
           wikidata,
           phone,
           openingHours,
