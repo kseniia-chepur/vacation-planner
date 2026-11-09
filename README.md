@@ -14,6 +14,7 @@ A full-stack application for planning trips and discovering tourist attractions.
 - Generate random photos for selected destinations via the [Unsplash API](https://unsplash.com/developers)
 - Geocode destinations using the [Geoapify API](https://www.geoapify.com/)
 - Discover tourist attractions near destinations using the [Overpass API](https://overpass.ch/)
+- Fetch additional place details via the [Wikidata API](https://www.wikidata.org/w/api.php)
 
 ## Project Structure
 
