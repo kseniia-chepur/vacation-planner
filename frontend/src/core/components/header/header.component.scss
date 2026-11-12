@@ -1,0 +1,51 @@
+.destinations-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding-block: 20px;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+
+  .label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  h1 {
+    font-size: clamp(26px, 4vw, 36px);
+    margin-block: 8px;
+  }
+
+  p {
+    font-size: clamp(12px, 1.5vw, 14px);
+  }
+
+  .add-destination {
+    font-size: clamp(14px, 1.5vw, 16px);
+    padding: 8px 16px;
+    border-radius: 20px;
+    background-color: transparent;
+    color: var(--mat-sys-on-primary-container);
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.1),
+      0 1px 3px rgba(0, 0, 0, 0.06);
+
+    &:hover {
+      background-color: var(--mat-sys-surface-container-low);
+    }
+  }
+  .desktop-label {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .desktop-label {
+      display: inline;
+    }
+
+    .mobile-label {
+      display: none;
+    }
+  }
+}
