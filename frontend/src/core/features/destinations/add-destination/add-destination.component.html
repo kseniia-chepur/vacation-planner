@@ -1,0 +1,82 @@
+<div class="form-container">
+  <form [formGroup]="destinationForm">
+    <div class="form-field">
+      <mat-form-field appearance="outline" color="primary" floatLabel="always">
+        <mat-label>Destination Name</mat-label>
+        <input matInput formControlName="name" />
+      </mat-form-field>
+    </div>
+    
+    <div class="form-field">
+      <mat-button-toggle-group
+        formControlName="periodType"
+        class="period-toggle"
+        hideSingleSelectionIndicator
+      >
+        <mat-button-toggle value="dateRange">Date range</mat-button-toggle>
+        <mat-button-toggle value="month">Month</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
+    @if (isDateRangePeriod()) {
+      <div class="date-range-fields">
+        <div class="form-field">
+          <mat-form-field appearance="outline" color="primary" floatLabel="always">
+            <mat-label>Start date</mat-label>
+            <input matInput [matDatepicker]="startPicker" formControlName="startDate" />
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="startPicker">
+              <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #startPicker />
+          </mat-form-field>
+        </div>
+        <div class="form-field">
+          <mat-form-field appearance="outline" color="primary" floatLabel="always">
+            <mat-label>End date</mat-label>
+            <input matInput [matDatepicker]="endPicker" formControlName="endDate" />
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="endPicker">
+              <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #endPicker />
+          </mat-form-field>
+        </div>
+      </div>
+    }
+
+    @if (isMonthPeriod()) {
+      <div class="month-fields">
+        <div class="form-field">
+          <mat-form-field appearance="outline" color="primary" floatLabel="always">
+            <mat-label>Month</mat-label>
+            <input
+              matInput
+              appMonthDatepickerFormat
+              [matDatepicker]="monthPicker"
+              formControlName="month"
+              placeholder="Pick a month"
+              readonly
+            />
+            <mat-datepicker-toggle matIconSuffix [for]="monthPicker">
+              <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker
+              #monthPicker
+              startView="year"
+              (monthSelected)="onMonthSelected($event, monthPicker)"
+              panelClass="month-picker"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+    }
+
+    <div class="form-field notes-field">
+      <mat-form-field appearance="outline" color="primary" floatLabel="always">
+        <mat-label>Notes</mat-label>
+        <textarea matInput formControlName="notes" rows=""></textarea>
+      </mat-form-field>
+    </div>
+  </form>
+</div>

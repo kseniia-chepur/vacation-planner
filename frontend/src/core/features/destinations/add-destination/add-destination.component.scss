@@ -1,0 +1,49 @@
+.form-container {
+  display: flex;
+  justify-content: center;
+  padding-block: 32px;
+
+  form {
+    width: 100%;
+    max-width: 480px;
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  .period-toggle {
+    display: flex;
+    width: 100%;
+    max-width: 280px;
+    margin-inline: auto;
+    margin-block: 24px 20px;
+
+    mat-button-toggle {
+      flex: 1;
+    }
+  }
+
+  .date-range-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .form-field {
+      flex: 1;
+      min-width: 0;
+    }
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+    }
+  }
+
+  .mat-datepicker-toggle {
+    margin-right: 4px;
+  }
+
+  .notes-field {
+    margin-top: 40px;
+  }
+}
