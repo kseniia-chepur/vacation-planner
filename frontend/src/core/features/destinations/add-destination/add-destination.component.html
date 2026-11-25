@@ -6,7 +6,7 @@
         <input matInput formControlName="name" />
       </mat-form-field>
     </div>
-    
+
     <div class="form-field">
       <mat-button-toggle-group
         formControlName="periodType"
@@ -23,7 +23,12 @@
         <div class="form-field">
           <mat-form-field appearance="outline" color="primary" floatLabel="always">
             <mat-label>Start date</mat-label>
-            <input matInput [matDatepicker]="startPicker" formControlName="startDate" />
+            <input
+              matInput
+              [matDatepicker]="startPicker"
+              [min]="minDate"
+              formControlName="startDate"
+            />
             <mat-hint>MM/DD/YYYY</mat-hint>
             <mat-datepicker-toggle matIconSuffix [for]="startPicker">
               <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
@@ -34,7 +39,7 @@
         <div class="form-field">
           <mat-form-field appearance="outline" color="primary" floatLabel="always">
             <mat-label>End date</mat-label>
-            <input matInput [matDatepicker]="endPicker" formControlName="endDate" />
+            <input matInput [matDatepicker]="endPicker" [min]="minDate" formControlName="endDate" />
             <mat-hint>MM/DD/YYYY</mat-hint>
             <mat-datepicker-toggle matIconSuffix [for]="endPicker">
               <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
@@ -48,12 +53,18 @@
     @if (isMonthPeriod()) {
       <div class="month-fields">
         <div class="form-field">
-          <mat-form-field appearance="outline" color="primary" floatLabel="always">
+          <mat-form-field
+            appearance="outline"
+            color="primary"
+            floatLabel="always"
+            (click)="monthPicker.open()"
+          >
             <mat-label>Month</mat-label>
             <input
               matInput
               appMonthDatepickerFormat
               [matDatepicker]="monthPicker"
+              [min]="minMonthDate"
               formControlName="month"
               placeholder="Pick a month"
               readonly

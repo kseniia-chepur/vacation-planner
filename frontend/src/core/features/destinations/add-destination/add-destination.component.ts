@@ -29,7 +29,10 @@ export class AddDestinationComponent {
   private readonly fb = inject(FormBuilder);
 
   public destinationForm = this.fb.group({
-    name: this.fb.control<string>('', Validators.required),
+    name: this.fb.control<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(2)],
+    }),
     periodType: this.fb.control<string>(''),
     month: this.fb.control<Date | null>(null),
     year: this.fb.control<string>(''),
@@ -38,14 +41,27 @@ export class AddDestinationComponent {
     notes: this.fb.control<string>(''),
   });
 
+  public minDate = new Date();
+  public minMonthDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+
   private periodType = toSignal(this.destinationForm.controls.periodType.valueChanges);
 
   public isMonthPeriod = computed(() => this.periodType() === 'month');
-
   public isDateRangePeriod = computed(() => this.periodType() === 'dateRange');
 
   public onMonthSelected(date: Date, datepicker: MatDatepicker<Date>) {
     this.destinationForm.controls.month.setValue(date);
     datepicker.close();
+  }
+
+  public onSubmit(): void {
+    const name = this.destinationForm.controls.name.value.trim();
+
+    if (this.destinationForm.invalid || !name) {
+      return;
+    }
+
+    const destination = this.destinationForm.getRawValue();
+    destination.name = name;
   }
 }
